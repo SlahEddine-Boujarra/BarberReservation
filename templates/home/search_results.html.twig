@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Search Results - Fresha{% endblock %}
+
+{% block body %}
+<h1 style="text-align:center; margin-top:2rem;">Search Results</h1>
+
+<section class="recently-viewed" style="max-width: 1200px; margin: 2rem auto;">
+    <div class="venue-grid">
+        {% if results %}
+            {% for service in results %}
+                <div class="venue-card">
+                    <img src="{{ service.image ?? 'https://via.placeholder.com/400x250?text=' ~ service.name }}" alt="{{ service.name }}" class="venue-image">
+                    <div class="venue-name">{{ service.name }}</div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align:center;">No services found matching your search.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

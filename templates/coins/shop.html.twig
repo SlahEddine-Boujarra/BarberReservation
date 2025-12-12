@@ -1,0 +1,316 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Coins Shop - Fresha{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .coins-shop-container {
+        max-width: 1200px;
+        margin: 3rem auto;
+        padding: 0 2rem;
+    }
+
+    .shop-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .shop-header h1 {
+        font-size: 2.5rem;
+        color: #000;
+        margin-bottom: 1rem;
+    }
+
+    .shop-header p {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .current-balance {
+        background: linear-gradient(135deg, #ffd700, #ffed4e);
+        padding: 2rem;
+        border-radius: 16px;
+        text-align: center;
+        margin-bottom: 3rem;
+        box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .current-balance h2 {
+        font-size: 1.2rem;
+        color: #555;
+        margin-bottom: 0.5rem;
+    }
+
+    .current-balance .amount {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .packages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    .package-card {
+        background: white;
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .package-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .package-card.popular::before {
+        content: '⭐ POPULAR';
+        position: absolute;
+        top: 1rem;
+        right: -2rem;
+        background: #ff6b6b;
+        color: white;
+        padding: 0.3rem 3rem;
+        transform: rotate(45deg);
+        font-size: 0.75rem;
+        font-weight: bold;
+    }
+
+    .package-card.best-value::before {
+        content: '💎 BEST VALUE';
+        position: absolute;
+        top: 1rem;
+        right: -2.5rem;
+        background: #4ecdc4;
+        color: white;
+        padding: 0.3rem 3rem;
+        transform: rotate(45deg);
+        font-size: 0.75rem;
+        font-weight: bold;
+    }
+
+    .coin-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .package-amount {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 0.5rem;
+    }
+
+    .package-coins {
+        color: #666;
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .package-price {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #000;
+        margin-bottom: 1.5rem;
+    }
+
+    .package-features {
+        text-align: left;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .package-features li {
+        margin-bottom: 0.5rem;
+        color: #555;
+        font-size: 0.9rem;
+    }
+
+    .buy-btn {
+        width: 100%;
+        padding: 1rem;
+        background: #000;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .buy-btn:hover {
+        background: #333;
+        transform: translateY(-2px);
+    }
+
+    .info-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: #000;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .info-card {
+        padding: 1.5rem;
+        background: #f8f9fa;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .info-card .icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .info-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: #000;
+    }
+
+    .info-card p {
+        color: #666;
+        font-size: 0.95rem;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="coins-shop-container">
+    <div class="shop-header">
+        <h1>💰 Coins Shop</h1>
+        <p>Purchase coins to book premium services and unlock exclusive features</p>
+    </div>
+
+    <div class="current-balance">
+        <h2>Your Current Balance</h2>
+        <div class="amount">
+            <span>🪙</span>
+            <span>{{ user.coins }} Coins</span>
+        </div>
+    </div>
+
+    <div class="packages-grid">
+        <!-- Starter Package -->
+        <div class="package-card">
+            <div class="coin-icon">🪙</div>
+            <div class="package-amount">10</div>
+            <div class="package-coins">Coins</div>
+            <div class="package-price">$1.99</div>
+            <ul class="package-features">
+                <li>✓ Perfect for trying out</li>
+                <li>✓ Book basic services</li>
+                <li>✓ Never expires</li>
+            </ul>
+            <form method="post" action="{{ path('app_coins_purchase', {amount: 10}) }}">
+                <button type="submit" class="buy-btn">Buy Now</button>
+            </form>
+        </div>
+
+        <!-- Popular Package -->
+        <div class="package-card popular">
+            <div class="coin-icon">🪙</div>
+            <div class="package-amount">50</div>
+            <div class="package-coins">Coins</div>
+            <div class="package-price">$8.99</div>
+            <ul class="package-features">
+                <li>✓ 10% discount</li>
+                <li>✓ Most popular choice</li>
+                <li>✓ Priority booking</li>
+                <li>✓ Never expires</li>
+            </ul>
+            <form method="post" action="{{ path('app_coins_purchase', {amount: 50}) }}">
+                <button type="submit" class="buy-btn">Buy Now</button>
+            </form>
+        </div>
+
+        <!-- Value Package -->
+        <div class="package-card">
+            <div class="coin-icon">🪙</div>
+            <div class="package-amount">100</div>
+            <div class="package-coins">Coins</div>
+            <div class="package-price">$16.99</div>
+            <ul class="package-features">
+                <li>✓ 15% discount</li>
+                <li>✓ Great value</li>
+                <li>✓ Priority support</li>
+                <li>✓ Never expires</li>
+            </ul>
+            <form method="post" action="{{ path('app_coins_purchase', {amount: 100}) }}">
+                <button type="submit" class="buy-btn">Buy Now</button>
+            </form>
+        </div>
+
+        <!-- Premium Package -->
+        <div class="package-card best-value">
+            <div class="coin-icon">🪙</div>
+            <div class="package-amount">500</div>
+            <div class="package-coins">Coins</div>
+            <div class="package-price">$74.99</div>
+            <ul class="package-features">
+                <li>✓ 25% discount!</li>
+                <li>✓ Best value</li>
+                <li>✓ VIP support</li>
+                <li>✓ Exclusive perks</li>
+                <li>✓ Never expires</li>
+            </ul>
+            <form method="post" action="{{ path('app_coins_purchase', {amount: 500}) }}">
+                <button type="submit" class="buy-btn">Buy Now</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="info-section">
+        <h2>Why Buy Coins?</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="icon">⚡</div>
+                <h3>Instant Booking</h3>
+                <p>Use coins to instantly book appointments at premium salons and barbers</p>
+            </div>
+            <div class="info-card">
+                <div class="icon">🎁</div>
+                <h3>Exclusive Deals</h3>
+                <p>Access special discounts and exclusive offers only available with coins</p>
+            </div>
+            <div class="info-card">
+                <div class="icon">🔒</div>
+                <h3>Secure & Safe</h3>
+                <p>Your coins are stored securely and never expire</p>
+            </div>
+            <div class="info-card">
+                <div class="icon">💎</div>
+                <h3>Premium Features</h3>
+                <p>Unlock VIP services, priority scheduling, and more</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

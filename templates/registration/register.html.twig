@@ -1,0 +1,305 @@
+{% extends 'base_auth.html.twig' %}
+
+{% block title %}Register - Fresha{% endblock %}
+
+{% block stylesheets %}
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    .register-container {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    /* Tab Styling */
+    .tab-header {
+        display: flex;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tab-button {
+        flex: 1;
+        padding: 1.2rem;
+        background: #f5f5f5;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #666;
+        transition: all 0.3s;
+        position: relative;
+    }
+
+    .tab-button.active {
+        background: white;
+        color: #000;
+    }
+
+    .tab-button.active::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #000;
+    }
+
+    .tab-button:hover {
+        background: #e8e8e8;
+    }
+
+    .tab-button.active:hover {
+        background: white;
+    }
+
+    /* Form Content */
+    .form-content {
+        padding: 3rem;
+    }
+
+    .logo { 
+        text-align: center; 
+        font-size: 2rem; 
+        font-weight: bold; 
+        margin-bottom: 1rem; 
+        color: #000; 
+    }
+
+    h1 { 
+        text-align: center; 
+        font-size: 1.8rem; 
+        margin-bottom: 2rem; 
+        color: #000; 
+    }
+
+    .form-group { 
+        margin-bottom: 1.5rem; 
+    }
+
+    label { 
+        display: block; 
+        margin-bottom: 0.5rem; 
+        font-weight: 500; 
+        color: #333; 
+    }
+
+    /* Hide default radio buttons */
+    .role-selection input[type="radio"] {
+        display: none;
+    }
+
+    .role-selection {
+        display: none !important;
+    }
+
+    input[type="text"], 
+    input[type="email"], 
+    input[type="tel"], 
+    input[type="password"] {
+        width: 100%; 
+        padding: 0.9rem; 
+        border: 2px solid #e0e0e0; 
+        border-radius: 8px; 
+        font-size: 1rem; 
+        transition: border-color 0.3s;
+    }
+
+    input:focus { 
+        outline: none; 
+        border-color: #000; 
+    }
+
+    .checkbox-group { 
+        display: flex; 
+        align-items: center; 
+        gap: 0.5rem; 
+    }
+
+    .checkbox-group input[type="checkbox"] {
+        width: auto;
+    }
+
+    .error { 
+        color: #c33; 
+        font-size: 0.9rem; 
+        margin-top: 0.3rem; 
+    }
+
+    .btn { 
+        width: 100%; 
+        padding: 1rem; 
+        background: #000; 
+        color: white; 
+        border: none; 
+        border-radius: 8px; 
+        font-size: 1rem; 
+        font-weight: 600; 
+        cursor: pointer; 
+        transition: all 0.3s; 
+    }
+
+    .btn:hover { 
+        background: #333; 
+        transform: translateY(-2px); 
+    }
+
+    .login-link, .back-home { 
+        text-align: center; 
+        margin-top: 1rem; 
+    }
+
+    .login-link a, .back-home a { 
+        color: #000; 
+        text-decoration: none; 
+        font-weight: 600; 
+    }
+
+    .login-link a:hover, .back-home a:hover { 
+        text-decoration: underline; 
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 0.3rem 0.8rem;
+        background: #f0f0f0;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        margin-left: 0.5rem;
+    }
+
+    .role-badge.user {
+        background: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .role-badge.barber {
+        background: #f3e5f5;
+        color: #7b1fa2;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="register-container">
+    <!-- Tab Header -->
+    <div class="tab-header">
+        <button type="button" class="tab-button active" data-role="ROLE_USER">
+            👤 User
+        </button>
+        <button type="button" class="tab-button" data-role="ROLE_BARBER">
+            ✂️ Barber
+        </button>
+    </div>
+
+    <!-- Form Content -->
+    <div class="form-content">
+        <div class="logo">fresha</div>
+        <h1 id="form-title">
+            Create your account
+            <span class="role-badge user" id="role-badge">User</span>
+        </h1>
+
+        {{ form_start(registrationForm) }}
+
+            <!-- Hidden role field controlled by tabs -->
+            <div style="display: none;">
+                {{ form_widget(registrationForm.role) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.email) }}
+                {{ form_widget(registrationForm.email) }}
+                {{ form_errors(registrationForm.email) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.firstName) }}
+                {{ form_widget(registrationForm.firstName) }}
+                {{ form_errors(registrationForm.firstName) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.lastName) }}
+                {{ form_widget(registrationForm.lastName) }}
+                {{ form_errors(registrationForm.lastName) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.phone) }}
+                {{ form_widget(registrationForm.phone) }}
+                {{ form_errors(registrationForm.phone) }}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(registrationForm.plainPassword) }}
+                {{ form_widget(registrationForm.plainPassword) }}
+                {{ form_errors(registrationForm.plainPassword) }}
+            </div>
+
+            <div class="form-group checkbox-group">
+                {{ form_widget(registrationForm.agreeTerms) }}
+                {{ form_label(registrationForm.agreeTerms) }}
+                {{ form_errors(registrationForm.agreeTerms) }}
+            </div>
+
+            <button type="submit" class="btn">Register</button>
+
+        {{ form_end(registrationForm) }}
+
+        <div class="login-link">
+            Already have an account? <a href="{{ path('app_login') }}">Log in here</a>
+        </div>
+
+        <div class="back-home">
+            <a href="{{ path('app_home') }}">← Back to home</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const roleInputs = document.querySelectorAll('input[name="registration_form[role]"]');
+        const roleBadge = document.getElementById('role-badge');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const selectedRole = this.getAttribute('data-role');
+
+                // Update tab active state
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+
+                // Update role radio button
+                roleInputs.forEach(input => {
+                    if (input.value === selectedRole) {
+                        input.checked = true;
+                    }
+                });
+
+                // Update badge
+                if (selectedRole === 'ROLE_USER') {
+                    roleBadge.textContent = 'User';
+                    roleBadge.className = 'role-badge user';
+                } else {
+                    roleBadge.textContent = 'Barber';
+                    roleBadge.className = 'role-badge barber';
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,179 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fresha - Book Local Selfcare Services{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+/* ====== Hero Section ====== */
+.hero {
+    text-align: center;
+    padding: 4rem 2rem 2rem;
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+    color: #000;
+}
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+/* ====== Search Filters ====== */
+.search-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+.dropdown { position: relative; flex: 1; min-width: 200px; }
+.dropdown-btn {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: border-color 0.3s;
+}
+.dropdown-btn:hover { border-color: #000; }
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 105%;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    z-index: 999;
+    padding: 1rem;
+}
+.dropdown-content.active { display: block; }
+.dropdown-item {
+    padding: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.dropdown-item:hover { background: #f0f0f0; }
+.search-btn {
+    background: #000;
+    color: #fff;
+    padding: 1rem 2.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+.search-btn:hover { background: #333; transform: translateY(-2px); }
+
+/* ====== Recently Viewed / Featured Businesses ====== */
+.recently-viewed {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+}
+.venue-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+    gap: 1.5rem;
+}
+.venue-card {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+.venue-card:hover { transform: translateY(-5px); }
+.venue-image { width: 100%; height: 200px; object-fit: cover; }
+.venue-content { padding: 1rem; }
+.venue-title { font-weight: bold; font-size: 1.2rem; margin-bottom: 0.5rem; }
+.venue-description { font-size: 0.95rem; color: #555; margin-bottom: 1rem; }
+.venue-btn { background: #000; color: #fff; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; transition: all 0.3s; }
+.venue-btn:hover { background: #333; }
+.cta-business { margin-top: 2rem; display: inline-block; background: #FFD700; color: #000; padding: 0.8rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: bold; }
+.cta-business:hover { background: #e6c200; }
+</style>
+{% endblock %}
+
+{% block body %}
+<section class="hero">
+    <h1>Book Local Selfcare Services</h1>
+    <p>Discover top-rated salons, barbers, medspas, wellness studios and beauty experts trusted by millions worldwide.</p>
+
+    <div class="search-container">
+        <div class="dropdown">
+            <div class="dropdown-btn">🔍 All treatments and venues</div>
+            <div class="dropdown-content">
+                <div class="dropdown-item">Haircut</div>
+                <div class="dropdown-item">Beard Trim</div>
+                <div class="dropdown-item">Hair Coloring</div>
+                <div class="dropdown-item">Massage</div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <div class="dropdown-btn">📍 Current location</div>
+            <div class="dropdown-content">
+                <div class="dropdown-item">Use my location</div>
+                <div class="dropdown-item">Search city...</div>
+            </div>
+        </div>
+        <div class="dropdown">
+            <div class="dropdown-btn">📅 Any time</div>
+            <div class="dropdown-content">
+                <div class="dropdown-item">Today</div>
+                <div class="dropdown-item">Tomorrow</div>
+                <div class="dropdown-item">This week</div>
+            </div>
+        </div>
+        <button class="search-btn">Search</button>
+    </div>
+
+    <a href="{{ path('app_barber_new') }}" class="cta-business">Join as a Business</a>
+</section>
+
+<section class="recently-viewed">
+    <h2>Featured Businesses</h2>
+    <div class="venue-grid">
+        {% for barber in barbers %}
+        <div class="venue-card">
+            <img src="{{ asset('images/default-barber.jpg') }}" alt="{{ barber.name }}" class="venue-image">
+            <div class="venue-content">
+                <div class="venue-title">{{ barber.name }}</div>
+                <div class="venue-description">{{ barber.location ?: 'No location provided' }}</div>
+                <a href="{{ path('app_barber_show', {id: barber.id}) }}" class="venue-btn">View Details</a>
+            </div>
+        </div>
+        {% else %}
+        <p>No barbers found yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<script>
+document.querySelectorAll('.dropdown-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+        let content = btn.nextElementSibling;
+        content.classList.toggle('active');
+    });
+});
+document.addEventListener('click', (event) => {
+    if (!event.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown-content').forEach(box => box.classList.remove('active'));
+    }
+});
+</script>
+{% endblock %}
