@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BarberRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BarberRepository::class)]
@@ -24,9 +26,23 @@ class Barber
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $location = null;
+    
+    // The User account that owns this Barber profile (e.g., the owner who registered as ROLE_BARBER)
     #[ORM\ManyToOne(inversedBy: 'barbers')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private ?User $user = null; 
+
+    // OneToMany relation: A Barber receives many Reservations
+    /**
+     * @var Collection<int, Reservation>
+     */
+    #[ORM\OneToMany(mappedBy: 'barber', targetEntity: Reservation::class)]
+    private Collection $reservations; 
+
+    public function __construct()
+    {
+        $this->reservations = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -41,7 +57,6 @@ class Barber
     public function setName(?string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -53,7 +68,6 @@ class Barber
     public function setEmail(?string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -65,7 +79,6 @@ class Barber
     public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
-
         return $this;
     }
 
@@ -77,20 +90,47 @@ class Barber
     public function setLocation(?string $location): static
     {
         $this->location = $location;
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setBarber($this);
+        }
 
         return $this;
     }
 
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getBarber() === $this) {
+                $reservation->setBarber(null);
+            }
+        }
 
-
-public function getUser(): ?User
-{
-    return $this->user;
-}
-
-public function setUser(?User $user): static
-{
-    $this->user = $user;
-    return $this;
-}
+        return $this;
+    }
 }

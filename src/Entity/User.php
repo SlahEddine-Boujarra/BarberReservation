@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -48,9 +50,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private int $coins = 2;
 
+    // OneToMany: Barber profiles owned by this user (Only one per user is typical)
+    /**
+     * @var Collection<int, Barber>
+     */
+    #[ORM\OneToMany(targetEntity: Barber::class, mappedBy: 'user')]
+    private Collection $barbers;
+
+    /**
+     * @var Collection<int, Reservation>
+     */
+    #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'user')]
+    private Collection $reservations;
+
     public function __construct()
 {
     $this->coins = 0;
+    $this->reservations = new ArrayCollection();
+    $this->barbers = new ArrayCollection();
 }
     public function getId(): ?int
     {
@@ -85,9 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
+        $roles[] = 'ROLE_USER'; // <--- CETTE LIGNE EST CRUCIALE
         return array_unique($roles);
     }
 
@@ -114,17 +129,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $password;
 
         return $this;
-    }
-
-    /**
-     * Ensure the session doesn't contain actual password hashes by CRC32C-hashing them, as supported since Symfony 7.3.
-     */
-    public function __serialize(): array
-    {
-        $data = (array) $this;
-        $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
-        
-        return $data;
     }
 
     #[\Deprecated]
@@ -205,5 +209,63 @@ public function setCoins(int $coins): static
     {
         return $this->coins >= $amount;
     }
-    
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservations(): Collection
+    {
+        return $this->reservations;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            $reservation->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        if ($this->reservations->removeElement($reservation)) {
+            // set the owning side to null (unless already changed)
+            if ($reservation->getUser() === $this) {
+                $reservation->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+   /**
+     * @return Collection<int, Barber>
+     */
+    public function getBarbers(): Collection
+    {
+        return $this->barbers;
+    }
+
+    public function addBarber(Barber $barber): static
+    {
+        if (!$this->barbers->contains($barber)) {
+            $this->barbers->add($barber);
+            $barber->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBarber(Barber $barber): static
+    {
+        if ($this->barbers->removeElement($barber)) {
+            if ($barber->getUser() === $this) {
+                $barber->setUser(null);
+            }
+        }
+        return $this;
+    }
 }
+    
+

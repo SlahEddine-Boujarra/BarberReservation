@@ -1,179 +1,178 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Fresha{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block stylesheets %}
+    <style>
+        /* --- 1. Global Reset & Typography --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-{% block title %}Fresha - Book Local Selfcare Services{% endblock %}
+        body {
+            /* Cleaner, softer background gradient */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* Light Grey/Blue Soft Gradient */
+            min-height: 100vh;
+            color: #333; /* Darker text for readability */
+        }
 
-{% block stylesheets %}
-{{ parent() }}
-<style>
-/* ====== Hero Section ====== */
-.hero {
-    text-align: center;
-    padding: 4rem 2rem 2rem;
-    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
-    color: #000;
-}
-.hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-.hero p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-}
+        /* --- 2. Navbar Refinement --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 3rem; /* More padding */
+            background: #ffffff; /* Solid White for maximum contrast */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Softer, wider shadow */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-/* ====== Search Filters ====== */
-.search-container {
-    max-width: 1200px;
-    margin: 2rem auto;
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    background: #fff;
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-}
-.dropdown { position: relative; flex: 1; min-width: 200px; }
-.dropdown-btn {
-    width: 100%;
-    padding: 1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    background: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: border-color 0.3s;
-}
-.dropdown-btn:hover { border-color: #000; }
-.dropdown-content {
-    display: none;
-    position: absolute;
-    top: 105%;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
-    z-index: 999;
-    padding: 1rem;
-}
-.dropdown-content.active { display: block; }
-.dropdown-item {
-    padding: 0.8rem;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.dropdown-item:hover { background: #f0f0f0; }
-.search-btn {
-    background: #000;
-    color: #fff;
-    padding: 1rem 2.5rem;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: 600;
-    transition: all 0.3s;
-}
-.search-btn:hover { background: #333; transform: translateY(-2px); }
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700; /* Bolder logo */
+            color: #007bff; /* Primary brand color (Blue) */
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
 
-/* ====== Recently Viewed / Featured Businesses ====== */
-.recently-viewed {
-    max-width: 1200px;
-    margin: 4rem auto;
-    padding: 0 2rem;
-}
-.venue-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
-    gap: 1.5rem;
-}
-.venue-card {
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-}
-.venue-card:hover { transform: translateY(-5px); }
-.venue-image { width: 100%; height: 200px; object-fit: cover; }
-.venue-content { padding: 1rem; }
-.venue-title { font-weight: bold; font-size: 1.2rem; margin-bottom: 0.5rem; }
-.venue-description { font-size: 0.95rem; color: #555; margin-bottom: 1rem; }
-.venue-btn { background: #000; color: #fff; padding: 0.6rem 1.2rem; border-radius: 6px; text-decoration: none; transition: all 0.3s; }
-.venue-btn:hover { background: #333; }
-.cta-business { margin-top: 2rem; display: inline-block; background: #FFD700; color: #000; padding: 0.8rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: bold; }
-.cta-business:hover { background: #e6c200; }
-</style>
-{% endblock %}
+        .nav-buttons {
+            display: flex;
+            gap: 1.2rem; /* Increased gap */
+            align-items: center;
+        }
+        
+        /* --- 3. Button Styling Refinement --- */
+        .btn {
+            padding: 0.7rem 1.6rem;
+            border: 1px solid transparent; /* Consistent border for all */
+            border-radius: 6px; /* Slightly less aggressive rounding */
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600; /* Semi-bold text */
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1); /* Smoother transition */
+        }
 
-{% block body %}
-<section class="hero">
-    <h1>Book Local Selfcare Services</h1>
-    <p>Discover top-rated salons, barbers, medspas, wellness studios and beauty experts trusted by millions worldwide.</p>
+        /* Primary Button (Profile) - Solid Brand Color */
+        .btn-profile {
+            background: #007bff; 
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 123, 255, 0.3);
+        }
 
-    <div class="search-container">
-        <div class="dropdown">
-            <div class="dropdown-btn">🔍 All treatments and venues</div>
-            <div class="dropdown-content">
-                <div class="dropdown-item">Haircut</div>
-                <div class="dropdown-item">Beard Trim</div>
-                <div class="dropdown-item">Hair Coloring</div>
-                <div class="dropdown-item">Massage</div>
-            </div>
-        </div>
-        <div class="dropdown">
-            <div class="dropdown-btn">📍 Current location</div>
-            <div class="dropdown-content">
-                <div class="dropdown-item">Use my location</div>
-                <div class="dropdown-item">Search city...</div>
-            </div>
-        </div>
-        <div class="dropdown">
-            <div class="dropdown-btn">📅 Any time</div>
-            <div class="dropdown-content">
-                <div class="dropdown-item">Today</div>
-                <div class="dropdown-item">Tomorrow</div>
-                <div class="dropdown-item">This week</div>
-            </div>
-        </div>
-        <button class="search-btn">Search</button>
-    </div>
+        .btn-profile:hover {
+            background: #0056b3; 
+            box-shadow: 0 6px 10px rgba(0, 123, 255, 0.4);
+        }
 
-    <a href="{{ path('app_barber_new') }}" class="cta-business">Join as a Business</a>
-</section>
+        /* Secondary/Outline Button (Login/Logout) */
+        .btn-login {
+            background: transparent;
+            color: #007bff; 
+            border: 1px solid #007bff;
+        }
 
-<section class="recently-viewed">
-    <h2>Featured Businesses</h2>
-    <div class="venue-grid">
-        {% for barber in barbers %}
-        <div class="venue-card">
-            <img src="{{ asset('images/default-barber.jpg') }}" alt="{{ barber.name }}" class="venue-image">
-            <div class="venue-content">
-                <div class="venue-title">{{ barber.name }}</div>
-                <div class="venue-description">{{ barber.location ?: 'No location provided' }}</div>
-                <a href="{{ path('app_barber_show', {id: barber.id}) }}" class="venue-btn">View Details</a>
-            </div>
-        </div>
+        .btn-login:hover {
+            background: #e9f5ff; /* Light blue background on hover */
+            color: #007bff;
+        }
+        
+        /* Outline Button (Register/List Business) */
+        .btn-business {
+            background: transparent;
+            color: #555; /* Dark gray for a neutral look */
+            border: 1px solid #ddd;
+        }
+
+        .btn-business:hover {
+            background: #f8f8f8;
+            border-color: #aaa;
+        }
+
+        /* User Welcome Text */
+        .nav-buttons > span {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        /* --- 4. Badges and Flash Messages --- */
+        .coins-badge {
+            /* Updated gold to be cleaner */
+            background: linear-gradient(45deg, #ffc107, #ffecb3); /* Brighter, modern gold */
+            color: #856404; /* Dark gold text */
+            padding: 0.35rem 0.9rem;
+            border-radius: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            box-shadow: 0 2px 4px rgba(255, 193, 7, 0.4);
+        }
+        
+        .flash-messages {
+            max-width: 1000px; /* Slightly narrower content area */
+            margin: 1.5rem auto;
+            padding: 0 2rem;
+        }
+
+        .flash-messages div {
+             /* Added subtle shadow and thicker border for messages */
+            padding: 1rem 1.5rem; 
+            border-radius: 8px; 
+            margin-bottom: 1rem;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .flash-messages .success {
+            background: #e6ffed; 
+            color: #0a7e36; 
+            border: 2px solid #a3e6b4; 
+        }
+
+        .flash-messages .error {
+            background: #ffebe9; 
+            color: #b7393d; 
+            border: 2px solid #ffb3b0; 
+        }
+
+        .flash-messages .info {
+            background: #e9f5ff; 
+            color: #007bff; 
+            border: 2px solid #b3d7ff; 
+        }
+
+    </style>
+    {% endblock %}
+</head>
+<body>
+<nav class="navbar">
+    <a href="{{ path('app_home') }}" class="logo">Fresha</a>
+    <div class="nav-buttons">
+        {% if app.user %}
+            <span>Welcome, {{ app.user.firstName }}!</span>
+            <a href="{{ path('app_coins_shop') }}" class="coins-badge">✨ {{ app.user.coins }} Coins</a>
+            <a href="{{ path('app_profile') }}" class="btn btn-profile">Profile</a>
+            <a href="{{ path('app_logout') }}" class="btn btn-login">Logout</a>
         {% else %}
-        <p>No barbers found yet.</p>
-        {% endfor %}
+            <a href="{{ path('app_login') }}" class="btn btn-login">Log In</a>
+            <a href="{{ path('app_register') }}" class="btn btn-business">Register</a>
+        {% endif %}
     </div>
-</section>
+</nav>
 
-<script>
-document.querySelectorAll('.dropdown-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-        let content = btn.nextElementSibling;
-        content.classList.toggle('active');
-    });
-});
-document.addEventListener('click', (event) => {
-    if (!event.target.closest('.dropdown')) {
-        document.querySelectorAll('.dropdown-content').forEach(box => box.classList.remove('active'));
-    }
-});
-</script>
-{% endblock %}
+    {% for label, messages in app.flashes %}
+        <div class="flash-messages">
+            {% for message in messages %}
+                <div class="{{ label }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    {% block body %}{% endblock %}
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

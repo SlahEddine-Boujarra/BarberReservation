@@ -3,7 +3,9 @@
 {% block title %}Coins Shop - Fresha{% endblock %}
 
 {% block stylesheets %}
+     {{ parent() }}
 <style>
+
     .coins-shop-container {
         max-width: 1200px;
         margin: 3rem auto;
@@ -213,7 +215,7 @@
         <h2>Your Current Balance</h2>
         <div class="amount">
             <span>🪙</span>
-            <span>{{ user.coins }} Coins</span>
+            <span>{{ app.user.coins }} Coins</span>
         </div>
     </div>
 
